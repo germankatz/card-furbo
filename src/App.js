@@ -1,8 +1,7 @@
 import "./App.css";
-import Formacion from "./components/formacion";
 import { useState } from "react";
 import Carta from "./components/carta";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Formacion from "./components/formacion";
 
 const formaciones = [
 	{ def: 4, med: 2, del: 1, name: "4-2-1" },
@@ -13,34 +12,34 @@ const formaciones = [
 
 const cartas = [
 	{
-		titulo: "Avanzar",
+		titulo: "ataque",
 		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
 		type: "ataque",
 	},
 	{
-		titulo: "Avanzar",
+		titulo: "defensa",
+		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
+		type: "defensa",
+	},
+	{
+		titulo: "ataque",
 		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
 		type: "ataque",
 	},
 	{
-		titulo: "Avanzar",
+		titulo: "ataque",
 		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
 		type: "ataque",
 	},
 	{
-		titulo: "Avanzar",
+		titulo: "neutra",
 		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
-		type: "ataque",
+		type: "neutra",
 	},
 	{
-		titulo: "Avanzar",
+		titulo: "defensa",
 		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
-		type: "ataque",
-	},
-	{
-		titulo: "Avanzar",
-		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
-		type: "ataque",
+		type: "defensa",
 	},
 ];
 
