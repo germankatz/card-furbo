@@ -1,7 +1,9 @@
 import "./App.css";
 import { useState } from "react";
-import Carta from "./components/carta";
-import Formacion from "./components/formacion";
+import Carta from "./components/Carta/carta";
+
+import Cancha from "./components/Cancha/cancha";
+import ElegirFormacion from "./components/ElegirFormacion/elegirFormacion";
 
 const formaciones = [
 	{ def: 4, med: 2, del: 1, name: "4-2-1" },
@@ -47,38 +49,75 @@ function App() {
 	const [formacion1, setFormacion1] = useState({});
 	const [formacion2, setFormacion2] = useState({});
 
+
+	const [etapa, setEtapa] = useState(1);
+	const [posicionPelota, setPosicionPelota] = useState(2);
+	
+	
+	// Sistema de turnos
+	const [turnoJugador1, setTurnoJugador1] = useState(true);
+	const [turnosRestantes, setTurnosRestantes] = useState(20);
+
 	// Mezclar las formaciones
 	const shuffleFormaciones = () => {
 		const shuffledFormaciones = formaciones.sort(() => Math.random() - 0.5);
-		return shuffledFormaciones;
+		return [...shuffledFormaciones];
 	};
 
 	const elegirFormacion = (formacion) => {
-		console.log(formacion);
+		if (etapa === 1) {
+			setFormacion1(formacion);
+			setEtapa(2);
+		} else if (etapa === 2) {
+			setFormacion2(formacion);
+			setEtapa(3);
+		}
+		
 	};
 
+	const renderizadoEtapa = () => {
+		switch (etapa) {
+			case 1:
+				return(
+					<ElegirFormacion 
+						formaciones={shuffleFormaciones()} 
+						elegirFormacion={elegirFormacion}
+						nJugador="1"
+						/>
+				)
+			case 2:
+				return(
+					<ElegirFormacion 
+						formaciones={shuffleFormaciones()} 
+						elegirFormacion={elegirFormacion}
+						nJugador="2"
+						/>
+				);
+			case 3:
+				return(
+					<Cancha
+					formacion1={formacion1}
+					formacion2={formacion2}
+					posPelota={posicionPelota}
+					/>
+				);
+			default:
+				return "";
+		}
+	}
 	return (
 		<div className="App">
-			<header className="App-header">
-				Elegir una de las formaciones
-				<div className="flex gap-4 mt-8">
-					{formaciones.map((formacion) => (
-						<Formacion
-							key={formacion.name}
-							formacion={formacion}
-							onClick={elegirFormacion}
-						/>
-					))}
-				</div>
-			</header>
-			<header className="App-header">
+			
+			{ renderizadoEtapa() }
+
+			{/* <header className="App-header">
 				Elegir una de las cartas
 				<div className="flex gap-4 mt-8">
 					{cartas.map((carta, i) => (
 						<Carta key={i} carta={carta} />
 					))}
 				</div>
-			</header>
+			</header> */}
 		</div>
 	);
 }
