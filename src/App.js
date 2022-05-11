@@ -1,5 +1,8 @@
-import logo from "./logo.svg";
 import "./App.css";
+import Formacion from "./components/formacion";
+import { useState } from "react";
+import Carta from "./components/carta";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const formaciones = [
 	{ def: 4, med: 2, del: 1, name: "4-2-1" },
@@ -8,28 +11,74 @@ const formaciones = [
 	{ def: 2, med: 3, del: 1, name: "2-3-1" },
 ];
 
+const cartas = [
+	{
+		titulo: "Avanzar",
+		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
+		type: "ataque",
+	},
+	{
+		titulo: "Avanzar",
+		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
+		type: "ataque",
+	},
+	{
+		titulo: "Avanzar",
+		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
+		type: "ataque",
+	},
+	{
+		titulo: "Avanzar",
+		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
+		type: "ataque",
+	},
+	{
+		titulo: "Avanzar",
+		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
+		type: "ataque",
+	},
+	{
+		titulo: "Avanzar",
+		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
+		type: "ataque",
+	},
+];
+
 function App() {
+	const [formacion1, setFormacion1] = useState({});
+	const [formacion2, setFormacion2] = useState({});
+
 	// Mezclar las formaciones
 	const shuffleFormaciones = () => {
 		const shuffledFormaciones = formaciones.sort(() => Math.random() - 0.5);
 		return shuffledFormaciones;
 	};
 
+	const elegirFormacion = (formacion) => {
+		console.log(formacion);
+	};
+
 	return (
 		<div className="App">
 			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
-				<p>
-					Edit <code>src/App.js</code> and save to reload.
-				</p>
-				<a
-					className="App-link"
-					href="https://reactjs.org"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Learn React
-				</a>
+				Elegir una de las formaciones
+				<div className="flex gap-4 mt-8">
+					{formaciones.map((formacion) => (
+						<Formacion
+							key={formacion.name}
+							formacion={formacion}
+							onClick={elegirFormacion}
+						/>
+					))}
+				</div>
+			</header>
+			<header className="App-header">
+				Elegir una de las cartas
+				<div className="flex gap-4 mt-8">
+					{cartas.map((carta, i) => (
+						<Carta key={i} carta={carta} />
+					))}
+				</div>
 			</header>
 		</div>
 	);
