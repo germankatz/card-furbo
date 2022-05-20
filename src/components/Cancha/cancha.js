@@ -27,7 +27,7 @@ export default function Cancha({formacion1, formacion2, posPelota}) {
                         <div className="text-left">{formacion1.name} </div> 
                     </div> 
                 </div>
-                <div className="text-white">0-0</div>
+                <div className="text-white text-5xl">0 - 0</div>
                 <div className="text-white flex gap-4">
                     <div> 
                         <div>Jugador 2</div>
@@ -40,7 +40,9 @@ export default function Cancha({formacion1, formacion2, posPelota}) {
             {/* Tablero de juego */}
             <div className="h-5/6 flex justify-between  border-8 border-white">
                 <div className="grid grid-cols-1 content-center -mx-2 w-16 h-full">
-                    <div className="h-32 border-8 border-white"></div>
+                    <div className="h-32 border-8 border-white grid grid-cols-1">
+                        <div className="w-8 h-8 rounded-full bg-gray-800 place-self-center"></div>
+                    </div>
                 </div>
                 <div className="grid grid-cols-1 content-center h-full gap-24">
                     {[...Array(formacion1.def)].map((e, i) => (
@@ -90,11 +92,21 @@ export default function Cancha({formacion1, formacion2, posPelota}) {
                         </div>
                     ))}
                 </div>
-                <div className="grid grid-cols-1 content-center -mx-2 w-16 h-full">
-                    <div className="h-32 border-8 border-white"></div>
+                <div className="grid grid-cols-1 content-center -mx-2 w-16 h-full ">
+                    <div className="h-32 border-8 border-white grid grid-cols-1">
+                        <div className="w-8 h-8 rounded-full  bg-gray-800 place-self-center"></div>
+                    </div>
                 </div>
             </div>
+            {/* Cartas en Mano J1 (izquierda abajo, max 5)*/}
+            
+            {/*Cartas para elegir (aparecen abajo en el medio, max 5)*/}   
+
+            {/* Cartas en Mano J2 derecha abajo, max 5*/}
+
+           
         </div>
+
     )
 
 }

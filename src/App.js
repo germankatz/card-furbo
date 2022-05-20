@@ -14,40 +14,65 @@ const formaciones = [
 
 const cartas = [
 	{
-		titulo: "ataque",
-		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
+		titulo: "Pase",
+		descr: "Adelanta pelota un lugar",
 		type: "ataque",
 	},
 	{
-		titulo: "defensa",
-		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
+		titulo: "Centro",
+		descr: "Realizar centro",
+		type: "ataque",
+	},
+	{
+		titulo: "Cabeza",
+		descr: "Disparo de cabeza",
+		type: "ataque",
+	},
+	{
+		titulo: "Disparo",
+		descr: "Disparo al arco",
+		type: "ataque",
+	},
+	{
+		titulo: "Quite",
+		descr: "Finaliza turno rival",
 		type: "defensa",
 	},
-	{
-		titulo: "ataque",
-		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
-		type: "ataque",
-	},
-	{
-		titulo: "ataque",
-		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
-		type: "ataque",
-	},
-	{
-		titulo: "neutra",
-		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
-		type: "neutra",
-	},
-	{
-		titulo: "defensa",
-		descr: "Con esta carta lo que hace un es ser un tremendo capo capo capods kasfd alk",
-		type: "defensa",
-	},
+	// {
+	// 	titulo: "Foul",
+	// 	descr: "Cancela las cartas jugadas por el rival, pero juega de nuevo",
+	// 	type: "defensa",
+	// },
+	// {
+	// 	titulo: "Despeje 1",
+	// 	descr: "Cancela turno rival. Pelota adelanta 1 lugar. Siguiente jugador aleatorio",
+	// 	type: "defensa",
+	// },
+	// {
+	// 	titulo: "Despeje 2",
+	// 	descr: "Cancela turno rival. Pelota adelanta 2 lugares. Siguiente jugador aleatorio",
+	// 	type: "defensa",
+	// },
+	// {
+	// 	titulo: "Atajar",
+	// 	descr: "Ataje seguro",
+	// 	type: "defensa",
+	// },
+	// {
+	// 	titulo: "Adelantar",
+	// 	descr: "Adelantar jugador una posicion",
+	// 	type: "movimiento",
+	// },
+	// {
+	// 	titulo: "Atrasar",
+	// 	descr: "Retrasar jugador una posicion",
+	// 	type: "movimiento",
+	// },
 ];
 
 function App() {
-	const [formacion1, setFormacion1] = useState({});
-	const [formacion2, setFormacion2] = useState({});
+	const [formacion1, setFormacion1] = useState([]);
+	const [formacion2, setFormacion2] = useState([]);
 
 
 	const [etapa, setEtapa] = useState(1);
@@ -58,10 +83,21 @@ function App() {
 	const [turnoJugador1, setTurnoJugador1] = useState(true);
 	const [turnosRestantes, setTurnosRestantes] = useState(20);
 
+
+	//Sistema cartas
+	const [cartasJugador1, setcartasJugador1] = useState({});
+	const [cartasJugador2, setcartasJugador2] = useState({});
+	const [cartasAleatorias, setcartasAleatorias] = useState({});
+
 	// Mezclar las formaciones
 	const shuffleFormaciones = () => {
 		const shuffledFormaciones = formaciones.sort(() => Math.random() - 0.5);
 		return [...shuffledFormaciones];
+	};
+
+	const shuffleCartas = () => {
+		const shuffledCartas = cartas.sort(() => Math.random() - 0.5);
+		return [...shuffledCartas];  //Devuelvo 5
 	};
 
 	const elegirFormacion = (formacion) => {
@@ -105,21 +141,38 @@ function App() {
 				return "";
 		}
 	}
+
 	return (
 		<div className="App">
 			
 			{ renderizadoEtapa() }
 
-			{/* <header className="App-header">
-				Elegir una de las cartas
-				<div className="flex gap-4 mt-8">
+			<header className="flex items-center justify-center gap-10 ">
+
+				{/*Cartas jugador 1 */}
+				<div className="flex gap-1 mt-0">
 					{cartas.map((carta, i) => (
 						<Carta key={i} carta={carta} />
 					))}
 				</div>
-			</header> */}
+
+				{/*Cartas aleatorias */}
+				<div className="flex gap-1 mt-0">
+					{cartas.map((carta, i) => (
+						<Carta key={i} carta={carta} />
+					))}
+				</div>
+
+				{/*Cartas jugador 2 */}
+				<div className="flex gap-1 mt-0">
+					{cartas.map((carta, i) => (
+						<Carta key={i} carta={carta} />
+					))}
+				</div>
+			</header>
 		</div>
 	);
 }
+
 
 export default App;
