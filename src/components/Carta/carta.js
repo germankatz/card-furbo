@@ -1,4 +1,4 @@
-export default function Carta({ carta, onClick }) {
+export default function Carta({ carta, clickCarta, id }) {
 	const chooseBackground = (carta) => {
 		switch (carta.type) {
 			case "ataque":
@@ -12,10 +12,15 @@ export default function Carta({ carta, onClick }) {
 		}
 	};
 
+	const eleccionCarta = () => {
+		console.log("llave dentro de carta", id);
+		clickCarta(carta, id);
+	};
+
 	return (
 		//Cartas jugador 1
 
-		<div className="w-full" onClick={onClick}>
+		<div className="w-full" onClick={eleccionCarta}>
 			<div className="rounded bg-white text-gray-800 hover:-translate-y-4 transition-all cursor-pointer h-60">
 				<div className=" text-lg align-center font-semibold py-1 capitalize ">
 					{carta.titulo}

@@ -74,8 +74,24 @@ function App() {
 	const [formacion1, setFormacion1] = useState([]);
 	const [formacion2, setFormacion2] = useState([]);
 
+	// Etapa 1: Elegir formacion jugador 1
+	// Etapa 2: Elegir formacion jugador 2
+
+	// Etapa: Jugar
+	// Etapa 3: Elegir carta jugador 1
+	// Etapa 4: Jugar cartas jugador 1 (Seleccione las cartas a usar)
+	// Etapa 5: Implementar accion de cartas jugador 1 y actualizar tablero
+
+	// Etapa 6: Elegir carta jugador 2
+	// Etapa 7: Jugar cartas jugador 2 (Seleccione las cartas a usar)
+	// Etapa 8: Implementar accion de cartas jugador 2 y actualizar tablero
+
+	// Etapa 9: Restar turno restante y volver etapa 3 While turnosRestantes != 0
+
+	// Se fini
+
 	const [etapa, setEtapa] = useState(1);
-	const [posicionPelota, setPosicionPelota] = useState(2);
+	const [posicionPelota, setPosicionPelota] = useState(3);
 
 	// Sistema de turnos
 	const [turnoJugador1, setTurnoJugador1] = useState(true);
@@ -84,7 +100,11 @@ function App() {
 	//Sistema cartas
 	const [cartasJugador1, setcartasJugador1] = useState([]);
 	const [cartasJugador2, setcartasJugador2] = useState([]);
-	const [cartasAleatorias, setcartasAleatorias] = useState({});
+	const [cartasAleatorias, setCartasAleatorias] = useState([]);
+
+	// Contador de seleccionar cartas
+	const [seleccionadasJugador1, setSeleccionadasJugador1] = useState(0);
+	const [seleccionadasJugador2, setSeleccionadasJugador2] = useState(0);
 
 	// Mezclar las formaciones
 	const shuffleFormaciones = () => {
@@ -110,8 +130,53 @@ function App() {
 			setEtapa(2);
 		} else if (etapa === 2) {
 			setFormacion2(formacion);
+			setCartasAleatorias([...elegirNCartas(5)]);
 			setEtapa(3);
 		}
+	};
+
+	const elegirNCartas = (n) => {
+		// Choose n cards from cartas randomly
+		const cartasN = [];
+		const cartasEdit = [...cartas];
+		for (let i = 0; i < n; i++) {
+			const index = Math.floor(Math.random() * cartasEdit.length);
+			cartasN.push(cartasEdit[index]);
+			cartasEdit.splice(index, 1); // Quito 1 carta a partir del indice
+		}
+		return cartasN;
+	};
+
+	const clickCartaAleatoria = (carta) => {
+		// Vemos de quien es el turno
+		// turnoJugador1 <- Booleano que nos dice de quien es el turno;
+
+		// El jugador 1 tiene mas de 5 cartas
+		if (turnoJugador1) {
+			if (cartasJugador1.length < 5 && seleccionadasJugador1 < 3) {
+				setcartasJugador1([...cartasJugador1, carta]); // Agregar carta a cartasJugador1
+				setCartasAleatorias([...elegirNCartas(5)]); // Actualizar cartasAleatorias
+				setSeleccionadasJugador1(seleccionadasJugador1 + 1); // Sumo una elegida de carta mas de las 3 que puede usar
+			}
+		}
+	};
+
+	const clickCartaJugador1 = (carta, key) => {
+		if (!turnoJugador1) return; // Si no es el turno del jugador 1 no hago nada
+
+		// Elimino la carta del array de cartasJugador1 en la key
+		setcartasJugador1(cartasJugador1.filter((c, i) => i !== key));
+	};
+
+	const finalizarTurno = () => {
+		console.log("Finalizar turno");
+		if (turnoJugador1) setSeleccionadasJugador1(0);
+		else setSeleccionadasJugador2(0);
+
+		setTurnoJugador1(!turnoJugador1);
+		setTurnosRestantes(turnosRestantes - 1); // Turnos de toda la partida
+
+		// Actualizar etapa
 	};
 
 	const renderizadoEtapa = () => {
@@ -140,6 +205,14 @@ function App() {
 						posPelota={posicionPelota}
 						cartas={cartas}
 						cartasJugador1={cartasJugador1}
+						cartasJugador2={cartasJugador2}
+						etapa={etapa}
+						cartasAleatorias={cartasAleatorias}
+						clickCartaAleatoria={clickCartaAleatoria}
+						clickCartaJugador1={clickCartaJugador1}
+						seleccionadasJugador1={seleccionadasJugador1}
+						finalizarTurno={finalizarTurno}
+						turnoJugador1={turnoJugador1}
 					/>
 				);
 			default:
