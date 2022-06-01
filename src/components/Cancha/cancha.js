@@ -7,11 +7,14 @@ export default function Cancha({
 	posPelota,
 	cartas,
 	cartasJugador1,
+	cartasJugador2,
 	etapa,
 	cartasAleatorias,
 	clickCartaAleatoria,
 	clickCartaJugador1,
+	clickCartaJugador2,
 	seleccionadasJugador1,
+	seleccionadasJugador2,
 	finalizarTurno,
 	turnoJugador1,
 }) {
@@ -52,7 +55,7 @@ export default function Cancha({
 	};
 
 	const mazoJugador1 = () => {
-		let cantCartasJuagdor1 = cartasJugador1.length;
+		let cantCartasJugador1 = cartasJugador1.length;
 		let mazo = [];
 
 		cartasJugador1.map((carta, i) =>
@@ -67,10 +70,37 @@ export default function Cancha({
 			)
 		);
 
-		for (let index = 0; index < 5 - cantCartasJuagdor1; index++) {
+		for (let index = 0; index < 5 - cantCartasJugador1; index++) {
 			mazo.push(
 				<CartaVacia
-					key={index + cantCartasJuagdor1}
+					key={index + cantCartasJugador1}
+					className="w-1/5"
+				/>
+			);
+		}
+		return mazo;
+	};
+
+	const mazoJugador2 = () => {
+		let cantCartasJugador2 = cartasJugador2.length;
+		let mazo = [];
+
+		cartasJugador2.map((carta, i) =>
+			mazo.push(
+				<Carta
+					key={i}
+					id={i}
+					carta={carta}
+					className="w-1/5"
+					clickCarta={eleccionCartaJugador2}
+				/>
+			)
+		);
+
+		for (let index = 0; index < 5 - cantCartasJugador2; index++) {
+			mazo.push(
+				<CartaVacia
+					key={index + cantCartasJugador2}
 					className="w-1/5"
 				/>
 			);
@@ -88,6 +118,10 @@ export default function Cancha({
 
 	const terminarTurno = () => {
 		finalizarTurno();
+	};
+
+	const eleccionCartaJugador2 = (carta, id) => {
+		clickCartaJugador2(carta, id);
 	};
 
 	const graficarPelota = (posCancha) => {
@@ -233,7 +267,9 @@ export default function Cancha({
 					</div>
 
 					{/* Cartas en Mano J2 derecha abajo, max 5*/}
-					<div className="flex gap-1 mt-0 w-1/3"></div>
+					<div className="flex gap-1 mt-0 w-1/3">
+						{mazoJugador2}
+					</div>
 				</div>
 			</div>
 		</div>

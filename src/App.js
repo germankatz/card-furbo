@@ -129,6 +129,18 @@ function App() {
 			setFormacion1(formacion);
 			setEtapa(2);
 		} else if (etapa === 2) {
+			setcartasJugador2([
+				{
+					titulo: "Pase",
+					descr: "Adelanta pelota un lugar",
+					type: "ataque",
+				},
+				{
+					titulo: "Centro",
+					descr: "Realizar centro",
+					type: "ataque",
+				},
+			]);
 			setFormacion2(formacion);
 			setCartasAleatorias([...elegirNCartas(5)]);
 			setEtapa(3);
@@ -159,6 +171,13 @@ function App() {
 				setSeleccionadasJugador1(seleccionadasJugador1 + 1); // Sumo una elegida de carta mas de las 3 que puede usar
 			}
 		}
+		if (!turnoJugador1) {
+			if (cartasJugador2.length < 5 && seleccionadasJugador2 < 3) {
+				setcartasJugador2([...cartasJugador2, carta]); // Agregar carta a cartasJugador1
+				setCartasAleatorias([...elegirNCartas(5)]); // Actualizar cartasAleatorias
+				setSeleccionadasJugador2(seleccionadasJugador2 + 1); // Sumo una elegida de carta mas de las 3 que puede usar
+			}
+		}
 	};
 
 	const clickCartaJugador1 = (carta, key) => {
@@ -166,6 +185,13 @@ function App() {
 
 		// Elimino la carta del array de cartasJugador1 en la key
 		setcartasJugador1(cartasJugador1.filter((c, i) => i !== key));
+	};
+
+	const clickCartaJugador2 = (carta, key) => {
+		if (turnoJugador1) return; // Si no es el turno del jugador 1 no hago nada
+
+		// Elimino la carta del array de cartasJugador2 en la key
+		setcartasJugador2(cartasJugador2.filter((c, i) => i !== key));
 	};
 
 	const finalizarTurno = () => {
@@ -210,7 +236,9 @@ function App() {
 						cartasAleatorias={cartasAleatorias}
 						clickCartaAleatoria={clickCartaAleatoria}
 						clickCartaJugador1={clickCartaJugador1}
+						clickCartaJugador2={clickCartaJugador2}
 						seleccionadasJugador1={seleccionadasJugador1}
+						seleccionadasJugador2={seleccionadasJugador2}
 						finalizarTurno={finalizarTurno}
 						turnoJugador1={turnoJugador1}
 					/>
