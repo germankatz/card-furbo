@@ -131,8 +131,8 @@ function App() {
 		} else if (etapa === 2) {
 			setcartasJugador2([
 				{
-					titulo: "Pase",
-					descr: "Adelanta pelota un lugar",
+					titulo: "Pase largo",
+					descr: "Adelanta pelota dos lugares",
 					type: "ataque",
 				},
 				{
@@ -196,13 +196,17 @@ function App() {
 
 	const finalizarTurno = () => {
 		console.log("Finalizar turno");
+
+		// Actualizar turnos restantes
 		if (turnoJugador1) setSeleccionadasJugador1(0);
 		else setSeleccionadasJugador2(0);
 
-		setTurnoJugador1(!turnoJugador1);
+		// Actualizar turno
+		setTurnoJugador1(!turnoJugador1); // Cambiamos
 		setTurnosRestantes(turnosRestantes - 1); // Turnos de toda la partida
 
 		// Actualizar etapa
+		setEtapa(etapa + 1);
 	};
 
 	const renderizadoEtapa = () => {
@@ -223,7 +227,7 @@ function App() {
 						nJugador="2"
 					/>
 				);
-			case 3:
+			case 3: case 4: case 5: case 6: 
 				return (
 					<Cancha
 						formacion1={formacion1}

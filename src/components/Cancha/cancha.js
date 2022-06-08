@@ -268,7 +268,7 @@ export default function Cancha({
 
 					{/* Cartas en Mano J2 derecha abajo, max 5*/}
 					<div className="flex gap-1 mt-0 w-1/3">
-						{mazoJugador2}
+						{mazoJugador2()}
 					</div>
 				</div>
 			</div>
