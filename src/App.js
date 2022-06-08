@@ -18,39 +18,44 @@ const cartas = [
 		descr: "Adelanta pelota un lugar",
 		type: "ataque",
 	},
-	{
-		titulo: "Centro",
-		descr: "Realizar centro",
-		type: "ataque",
-	},
-	{
-		titulo: "Cabeza",
-		descr: "Disparo de cabeza",
-		type: "ataque",
-	},
+	// {
+	// 	titulo: "Centro",
+	// 	descr: "Realizar centro",
+	// 	type: "ataque",
+	// },
+	// {
+	// 	titulo: "Cabeza",
+	// 	descr: "Disparo de cabeza",
+	// 	type: "ataque",
+	// },
 	{
 		titulo: "Disparo",
 		descr: "Disparo al arco",
 		type: "ataque",
 	},
 	{
-		titulo: "Quite",
-		descr: "Finaliza turno rival",
+		titulo: "Defender",
+		descr: "Actua contra carta pase, aumenta probabilidad de finalizar turno rival",
 		type: "defensa",
 	},
+	// {
+	// 	titulo: "Foul",
+	// 	descr: "Cancela las cartas jugadas por el rival, pero juega de nuevo",
+	// 	type: "defensa",
+	// },
+	// {
+	// 	titulo: "Despeje 1",
+	// 	descr: "Cancela turno rival. Pelota adelanta 1 lugar. Siguiente jugador aleatorio",
+	// 	type: "defensa",
+	// },
+	// {
+	// 	titulo: "Despeje 2",
+	// 	descr: "Cancela turno rival. Pelota adelanta 2 lugares. Siguiente jugador aleatorio",
+	// 	type: "defensa",
+	// },
 	{
-		titulo: "Foul",
-		descr: "Cancela las cartas jugadas por el rival, pero juega de nuevo",
-		type: "defensa",
-	},
-	{
-		titulo: "Despeje 1",
-		descr: "Cancela turno rival. Pelota adelanta 1 lugar. Siguiente jugador aleatorio",
-		type: "defensa",
-	},
-	{
-		titulo: "Despeje 2",
-		descr: "Cancela turno rival. Pelota adelanta 2 lugares. Siguiente jugador aleatorio",
+		titulo: "Atajar",
+		descr: "Aumentar probabilidad de atajar",
 		type: "defensa",
 	},
 	{
@@ -59,15 +64,20 @@ const cartas = [
 		type: "defensa",
 	},
 	{
-		titulo: "Adelantar",
-		descr: "Adelantar jugador una posicion",
-		type: "movimiento",
+		titulo: "Atajar",
+		descr: "Ataje seguro",
+		type: "defensa",
 	},
-	{
-		titulo: "Atrasar",
-		descr: "Retrasar jugador una posicion",
-		type: "movimiento",
-	},
+	// {
+	// 	titulo: "Adelantar",
+	// 	descr: "Adelantar jugador una posicion",
+	// 	type: "movimiento",
+	// },
+	// {
+	// 	titulo: "Atrasar",
+	// 	descr: "Retrasar jugador una posicion",
+	// 	type: "movimiento",
+	// },
 ];
 
 function App() {
@@ -91,7 +101,7 @@ function App() {
 	// Se fini
 
 	const [etapa, setEtapa] = useState(1);
-	const [posicionPelota, setPosicionPelota] = useState(3);
+	const [posicionPelota, setPosicionPelota] = useState(2);
 
 	// Sistema de turnos
 	const [turnoJugador1, setTurnoJugador1] = useState(true);
@@ -106,6 +116,18 @@ function App() {
 	const [seleccionadasJugador1, setSeleccionadasJugador1] = useState(0);
 	const [seleccionadasJugador2, setSeleccionadasJugador2] = useState(0);
 
+	//Cartas defensa activas
+	const [defensaActivaJugador1, setDefensaActivaJugador1] = useState(false);
+	const [defensaActivaJugador2, setDefensaActivaJugador2] = useState(false);
+	
+	//Cartas atajar activar
+	const [atajarActivaJugador1, setAtajarActivaJugador1] = useState(false);
+	const [atajarActivaJugador2, setAtajarActivaJugador2] = useState(false);
+
+	// Puntajes
+	const [puntajeJugador1, setPuntajeJugador1] = useState(0);
+	const [puntajeJugador2, setPuntajeJugador2] = useState(0);
+
 	// Mezclar las formaciones
 	const shuffleFormaciones = () => {
 		const shuffledFormaciones = formaciones.sort(() => Math.random() - 0.5);
@@ -114,33 +136,11 @@ function App() {
 
 	const elegirFormacion = (formacion) => {
 		if (etapa === 1) {
-			setcartasJugador1([
-				{
-					titulo: "Pase",
-					descr: "Adelanta pelota un lugar",
-					type: "ataque",
-				},
-				{
-					titulo: "Centro",
-					descr: "Realizar centro",
-					type: "ataque",
-				},
-			]);
+			setcartasJugador1([]);
 			setFormacion1(formacion);
 			setEtapa(2);
 		} else if (etapa === 2) {
-			setcartasJugador2([
-				{
-					titulo: "Pase largo",
-					descr: "Adelanta pelota dos lugares",
-					type: "ataque",
-				},
-				{
-					titulo: "Centro",
-					descr: "Realizar centro",
-					type: "ataque",
-				},
-			]);
+			setcartasJugador2([]);
 			setFormacion2(formacion);
 			setCartasAleatorias([...elegirNCartas(5)]);
 			setEtapa(3);
@@ -180,11 +180,100 @@ function App() {
 		}
 	};
 
+	function coinFlip(prob) {
+		return(Math.random() < prob) ? true : false;
+   }
+
+
+	const jugarCarta1 = (carta) => {
+		if (carta.titulo == "Pase") {
+
+			if(posicionPelota != 3){
+				// Para que el pase se de hay que tener en cuenta 3 cosas
+				// 1. Cantidad de jugadores de la linea del jugador 1 de donde sale el pase y a donde llega 
+				// 2. Cantidad de jugadores de la linea del jugador 2 de donde sale el pase
+				// 3. Si el jugador 2 tiene una defensa activa
+
+				let chances = 1;
+				let sumaJugadoresPropios = 0;
+				let sumaJugadoresRivales = 0;
+				if (posicionPelota == 1) {
+					sumaJugadoresPropios = formacion1.def + formacion1.med; // 6
+					sumaJugadoresRivales = formacion2.del; // 2
+
+				}
+				if (posicionPelota == 2) {
+					sumaJugadoresPropios = formacion1.del + formacion1.med;
+					sumaJugadoresRivales = formacion2.med; 
+				}
+				chances = 3*sumaJugadoresPropios/(3*sumaJugadoresPropios + sumaJugadoresRivales);
+
+				if(defensaActivaJugador2){
+					// Chances dividadas entre 2
+					chances/=2
+				}
+				if (coinFlip(chances)){
+					setPosicionPelota(posicionPelota + 1);
+				}else{
+					alert("Pase fallido");
+					// Arranca el turno del jugador 2
+				}
+				console.log("Se jugo cara pase");
+			}
+		}
+		if (carta.titulo == "Disparo"){
+			//A mayor distancia, menos probabilidad de gol
+			let sumaJugadoresPropios = 0;
+			let sumaJugadoresRivales = 0;
+			let chances = 1;
+			if(posicionPelota == 3){
+				sumaJugadoresPropios = formacion1.del
+				sumaJugadoresRivales = formacion2.def
+			}
+			if(posicionPelota == 2){
+				sumaJugadoresPropios = formacion1.med
+				sumaJugadoresRivales = formacion2.med + formacion2.def
+			}
+			if(posicionPelota == 1){
+				sumaJugadoresPropios = formacion1.def
+				sumaJugadoresRivales = formacion2.del + formacion2.med + formacion2.def
+			}
+
+			chances = 0.5 * (1/3 * posicionPelota)
+					+    
+					0.5 * (3*sumaJugadoresPropios/(3*sumaJugadoresPropios + sumaJugadoresRivales));
+
+			if(atajarActivaJugador2){
+				// Chances divididas entre 2
+				chances/=2
+			}
+			// Divido todo por 2 para que no haya tantos goles
+			chances/=2;
+
+			alert("Probabilidad de gol: " + chances);
+			if (coinFlip(chances)){
+				alert("Gol");
+				setPosicionPelota(2);
+				setPuntajeJugador1(puntajeJugador1 + 1);
+			}else{
+				alert("Disparo fallido");
+				// Arranca el turno del jugador 2
+			}
+		}
+	}
 	const clickCartaJugador1 = (carta, key) => {
 		if (!turnoJugador1) return; // Si no es el turno del jugador 1 no hago nada
+		// Ver que etapa está 
+		if (etapa === 3) {
+			// Elimino la carta del array de cartasJugador1 en la key
+			setcartasJugador1(cartasJugador1.filter((c, i) => i !== key));
+		}
+		if (etapa === 4) {
+			//Juega la carta y la elimino del array de cartasJugador1 en la key
+			jugarCarta1(carta);
+			setcartasJugador1(cartasJugador1.filter((c, i) => i !== key)); // Elimino la carta del array de cartasJugador1 en la key
 
-		// Elimino la carta del array de cartasJugador1 en la key
-		setcartasJugador1(cartasJugador1.filter((c, i) => i !== key));
+		}
 	};
 
 	const clickCartaJugador2 = (carta, key) => {
@@ -194,7 +283,7 @@ function App() {
 		setcartasJugador2(cartasJugador2.filter((c, i) => i !== key));
 	};
 
-	const finalizarTurno = () => {
+	const clickBoton = () => {
 		console.log("Finalizar turno");
 
 		// Actualizar turnos restantes
@@ -202,9 +291,10 @@ function App() {
 		else setSeleccionadasJugador2(0);
 
 		// Actualizar turno
-		setTurnoJugador1(!turnoJugador1); // Cambiamos
-		setTurnosRestantes(turnosRestantes - 1); // Turnos de toda la partida
-
+		if(etapa === 6){
+			setTurnoJugador1(!turnoJugador1); // Cambiamos
+			setTurnosRestantes(turnosRestantes - 1); // Turnos de toda la partida
+		}
 		// Actualizar etapa
 		setEtapa(etapa + 1);
 	};
@@ -243,8 +333,10 @@ function App() {
 						clickCartaJugador2={clickCartaJugador2}
 						seleccionadasJugador1={seleccionadasJugador1}
 						seleccionadasJugador2={seleccionadasJugador2}
-						finalizarTurno={finalizarTurno}
+						finalizarTurno={clickBoton}
 						turnoJugador1={turnoJugador1}
+						puntajeJugador1={puntajeJugador1}
+						puntajeJugador2={puntajeJugador2}
 					/>
 				);
 			default:

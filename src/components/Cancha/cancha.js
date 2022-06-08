@@ -17,6 +17,8 @@ export default function Cancha({
 	seleccionadasJugador2,
 	finalizarTurno,
 	turnoJugador1,
+	puntajeJugador1,
+	puntajeJugador2,
 }) {
 	// Etapa: Jugar
 	// Etapa 3: Elegir carta jugador 1
@@ -28,6 +30,21 @@ export default function Cancha({
 	// Etapa 8: Implementar accion de cartas jugador 2 y actualizar tablero
 
 	// Etapa 9: Restar turno restante y volver etapa 3 While turnosRestantes != 0
+
+	const descrBoton = () => {
+		switch (etapa) {
+			case 1:	return "Elegir formacion";
+			case 2: return "Elegir formacion";
+			case 3: return "Jugar cartas";
+			case 4: return "Finalizar turno";
+			case 5: return "Finalizar turno";
+			case 6: return "Jugar cartas";
+			case 7: return "Finalizar turno";
+			case 8: return "Finalizando turno";
+			case 9: return "-";
+			default: return "";
+		}
+	};
 
 	const explicacionTablero = () => {
 		switch (etapa) {
@@ -57,7 +74,6 @@ export default function Cancha({
 	const mazoJugador1 = () => {
 		let cantCartasJugador1 = cartasJugador1.length;
 		let mazo = [];
-
 		cartasJugador1.map((carta, i) =>
 			mazo.push(
 				<Carta
@@ -69,6 +85,7 @@ export default function Cancha({
 				/>
 			)
 		);
+		console.log(cartasJugador1);
 
 		for (let index = 0; index < 5 - cantCartasJugador1; index++) {
 			mazo.push(
@@ -109,7 +126,9 @@ export default function Cancha({
 	};
 
 	const eleccionCartaJugador1 = (carta, id) => {
+		console.log("click carta cancha ",carta);
 		clickCartaJugador1(carta, id);
+		
 	};
 
 	const eleccionCartaAleatoria = (carta, key) => {
@@ -165,7 +184,7 @@ export default function Cancha({
 						</div>
 					</div>
 					<div className="text-white text-5xl">
-						<div>0-0</div>
+						<div>{puntajeJugador1} - {puntajeJugador2}</div>
 						<div className="text-center text-lg ">
 							{explicacionTablero()}
 						</div>
@@ -173,7 +192,7 @@ export default function Cancha({
 							onClick={terminarTurno}
 							className="p-3 bg-green-800 text-sm"
 						>
-							Finalizar turno
+							{descrBoton()}
 						</div>
 					</div>
 					<div className="text-white flex gap-4">
