@@ -19,6 +19,7 @@ export default function Cancha({
 	turnoJugador1,
 	puntajeJugador1,
 	puntajeJugador2,
+	turnosRestantes,
 }) {
 	// Etapa: Jugar
 	// Etapa 3: Elegir carta jugador 1
@@ -33,16 +34,26 @@ export default function Cancha({
 
 	const descrBoton = () => {
 		switch (etapa) {
-			case 1:	return "Elegir formacion";
-			case 2: return "Elegir formacion";
-			case 3: return "Jugar cartas";
-			case 4: return "Finalizar turno";
-			case 5: return "Finalizar turno";
-			case 6: return "Jugar cartas";
-			case 7: return "Finalizar turno";
-			case 8: return "Finalizando turno";
-			case 9: return "-";
-			default: return "";
+			case 1:
+				return "Elegir formacion";
+			case 2:
+				return "Elegir formacion";
+			case 3:
+				return "Jugar cartas";
+			case 4:
+				return "Finalizar turno";
+			case 5:
+				return "Finalizar turno";
+			case 6:
+				return "Jugar cartas";
+			case 7:
+				return "Finalizar turno";
+			case 8:
+				return "Finalizando turno";
+			case 9:
+				return "-";
+			default:
+				return "";
 		}
 	};
 
@@ -57,9 +68,9 @@ export default function Cancha({
 			case 4:
 				return "Jugar cartas jugador 1";
 			case 5:
-				return "";
-			case 6:
 				return "Elegir carta jugador 2";
+			case 6:
+				return "Jugar cartas jugador 2";
 			case 7:
 				return "Jugar cartas jugador 2";
 			case 8:
@@ -126,9 +137,8 @@ export default function Cancha({
 	};
 
 	const eleccionCartaJugador1 = (carta, id) => {
-		console.log("click carta cancha ",carta);
+		console.log("click carta cancha ", carta);
 		clickCartaJugador1(carta, id);
-		
 	};
 
 	const eleccionCartaAleatoria = (carta, key) => {
@@ -184,13 +194,18 @@ export default function Cancha({
 						</div>
 					</div>
 					<div className="text-white text-5xl">
-						<div>{puntajeJugador1} - {puntajeJugador2}</div>
+						<div className="text-sm">
+							{turnosRestantes} turnos restantes
+						</div>
+						<div>
+							{puntajeJugador1} - {puntajeJugador2}
+						</div>
 						<div className="text-center text-lg ">
 							{explicacionTablero()}
 						</div>
 						<div
 							onClick={terminarTurno}
-							className="p-3 bg-green-800 text-sm"
+							className="p-3 bg-green-800 text-sm rounded shadow-sm cursor-pointer hover:bg-green-900"
 						>
 							{descrBoton()}
 						</div>
