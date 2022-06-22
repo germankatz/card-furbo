@@ -336,6 +336,9 @@ function App() {
 				);
 				setPosicionPelota(2);
 				setPuntajeJugador1(puntajeJugador1 + 1);
+				
+				setTurnoJugador1(false);
+				clickBoton();
 			} else {
 				showDialog(
 					`Gol errado con ${porcentual(
@@ -396,6 +399,10 @@ function App() {
 				);
 				setPosicionPelota(2);
 				setPuntajeJugador1(puntajeJugador1 + 1);
+				// Arranca el turno del jugador 2
+				setTurnoJugador1(false);
+				clickBoton();
+				return;
 			} else {
 				showDialog(
 					`Gol errado con ${porcentual(
@@ -550,6 +557,10 @@ function App() {
 				showDialog(`Gol! con ${chances * 100} chances`, "success");
 				setPosicionPelota(2);
 				setPuntajeJugador2(puntajeJugador2 + 1);
+				// Arranca el turno del jugador 1
+				setTurnoJugador1(true);
+				clickBoton();
+				return;
 			} else {
 				showDialog(
 					`Gol errado con ${chances * 100} chances, turno jugador 2`,
@@ -608,6 +619,10 @@ function App() {
 				);
 				setPosicionPelota(2);
 				setPuntajeJugador2(puntajeJugador2 + 1);
+				// Arranca el turno del jugador 2
+				setTurnoJugador1(true);
+				clickBoton();
+				return;
 			} else {
 				showDialog(
 					`Gol errado con ${porcentual(
