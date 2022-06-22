@@ -334,14 +334,14 @@ function App() {
 				return;
 			}
 		}
-
 		if(carta.titulo == "Centro"){
 			if(posicionPelota == 3){
 				setCentroActivaJugador1(true);
+			}else{
+				showDialog("Los centros se tiran en el area rival");
 			}
 			return;
 		}
-
 		if (carta.titulo == "Cabeza") {
 			//A mayor distancia, menos probabilidad de gol
 			let sumaJugadoresPropios = 0;
@@ -352,6 +352,7 @@ function App() {
 				sumaJugadoresRivales = formacion2.def;
 			}
 			else{
+				showDialog("La cabeza se tiran en el area rival");
 				return;
 			}
 
@@ -462,7 +463,7 @@ function App() {
 			}
 
 			chances =
-				0.5 * ((1 / 3) * posicionPelota) +
+				0.5 * (1/ posicionPelota) +
 				0.5 *
 					((3 * sumaJugadoresPropios) /
 						(3 * sumaJugadoresPropios + sumaJugadoresRivales));
@@ -477,10 +478,70 @@ function App() {
 			if (coinFlip(chances)) {
 				showDialog(`Gol! con ${chances * 100} chances`, "success");
 				setPosicionPelota(2);
-				setPuntajeJugador1(puntajeJugador2 + 1);
+				setPuntajeJugador2(puntajeJugador2 + 1);
 			} else {
 				showDialog(
 					`Gol errado con ${chances * 100} chances, turno jugador 2`,
+					"error"
+				);
+				// Arranca el turno del jugador 1
+				setTurnoJugador1(true);
+				clickBoton();
+				return;
+			}
+		}
+		if(carta.titulo == "Centro"){
+			if(posicionPelota == 1){
+				setCentroActivaJugador2(true);
+			}else{
+				showDialog("Los centros se tiran en el area rival");
+			}
+			return;
+		}
+		if (carta.titulo == "Cabeza") {
+			//A mayor distancia, menos probabilidad de gol
+			let sumaJugadoresPropios = 0;
+			let sumaJugadoresRivales = 0;
+			let chances = 1;
+			if (posicionPelota == 1) {
+				sumaJugadoresPropios = formacion2.del;
+				sumaJugadoresRivales = formacion1.def;
+			}
+			else{
+				showDialog("La cabeza se tiran en el area rival");
+				return;
+			}
+
+			chances =
+				0.5 * (1/ posicionPelota) +
+				0.5 *
+					((3 * sumaJugadoresPropios) /
+						(3 * sumaJugadoresPropios + sumaJugadoresRivales));
+
+			if (atajarActivaJugador1) {
+				// Chances divididas entre 2
+				chances /= 2;
+			}
+
+			if (centroActivaJugador2) {
+				chances*=2;
+				setCentroActivaJugador2(false);
+			}
+			// Divido todo por 2 para que no haya tantos goles
+			chances /= 2;
+
+			if (coinFlip(chances)) {
+				showDialog(
+					`Gol! con ${porcentual(chances)} chances`,
+					"success"
+				);
+				setPosicionPelota(2);
+				setPuntajeJugador2(puntajeJugador2 + 1);
+			} else {
+				showDialog(
+					`Gol errado con ${porcentual(
+						chances
+					)} chances, turno jugador 2`,
 					"error"
 				);
 				// Arranca el turno del jugador 2
@@ -523,6 +584,10 @@ function App() {
 	const clickBoton = () => {
 		console.log("Finalizar turno");
 
+		// Seteo todos los centros en false
+		setCentroActivaJugador1(false);
+		setCentroActivaJugador2(false);
+
 		// Actualizar turnos restantes
 		if (turnoJugador1) setSeleccionadasJugador1(0);
 		else setSeleccionadasJugador2(0);
@@ -533,6 +598,7 @@ function App() {
 		}
 
 		if (etapa === 6) {
+			setTurnoJugador1(true);
 			setTurnosRestantes(turnosRestantes - 1); // Turnos de toda la partida
 			setEtapa(3);
 		} else {

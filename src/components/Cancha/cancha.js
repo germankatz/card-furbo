@@ -68,7 +68,9 @@ export default function Cancha({
 			case 4:
 				return "Jugar cartas jugador 1";
 			case 5:
-				return "Elegir carta jugador 2";
+				return "Elegir carta jugador 2 - "  +
+				(3 - seleccionadasJugador2) +
+				" restantes";
 			case 6:
 				return "Jugar cartas jugador 2";
 			case 7:
@@ -187,13 +189,16 @@ export default function Cancha({
 				{/* Marcador del juego juego */}
 				<div className="flex justify-between  mb-8 text-2xl font-bold px-16 uppercase">
 					<div className="text-white flex gap-4">
-						<div className="rounded-full w-5 h-5 bg-blue-500 mt-2"></div>
 						<div>
+							<div className={"rounded-full w-5 h-5 bg-blue-500 mt-2 absolute "}></div>
+							<div className={"rounded-full w-5 h-5 bg-blue-500 mt-2 absolute " + (turnoJugador1?  "animate-ping" : null)}></div>
+						</div>
+						<div className="ml-4">
 							<div>Jugador 1</div>
 							<div className="text-left">{formacion1.name} </div>
 						</div>
 					</div>
-					<div className="text-white text-5xl">
+					<div className="text-white text-5xl grid justify-items-center">
 						<div className="text-sm">
 							{turnosRestantes} turnos restantes
 						</div>
@@ -205,9 +210,12 @@ export default function Cancha({
 						</div>
 						<div
 							onClick={terminarTurno}
-							className="p-3 bg-green-800 text-sm rounded shadow-sm cursor-pointer hover:bg-green-900"
+							className="px-4 py-3 flex bg-green-800 text-sm rounded-full w-min shadow-sm cursor-pointer hover:bg-green-900"
 						>
-							{descrBoton()}
+							NEXT 
+							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+							</svg>
 						</div>
 					</div>
 					<div className="text-white flex gap-4">
@@ -215,7 +223,10 @@ export default function Cancha({
 							<div>Jugador 2</div>
 							<div className="text-right">{formacion2.name} </div>
 						</div>
-						<div className="rounded-full w-5 h-5 bg-red-500 mt-2"></div>
+						<div>
+							<div className={"rounded-full w-5 h-5 bg-red-500 mt-2 absolute" }></div>
+							<div className={"rounded-full w-5 h-5 bg-red-500 mt-2 absolute " + (!turnoJugador1? "animate-ping": null)}></div>
+						</div>
 					</div>
 				</div>
 
