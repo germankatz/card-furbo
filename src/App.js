@@ -18,16 +18,16 @@ const cartas = [
 		descr: "Adelanta pelota un lugar",
 		type: "ataque",
 	},
-	// {
-	// 	titulo: "Centro",
-	// 	descr: "Realizar centro",
-	// 	type: "ataque",
-	// },
-	// {
-	// 	titulo: "Cabeza",
-	// 	descr: "Disparo de cabeza",
-	// 	type: "ataque",
-	// },
+	{
+		titulo: "Centro",
+		descr: "Realizar centro",
+		type: "ataque",
+	},
+	{
+		titulo: "Cabeza",
+		descr: "Disparo de cabeza",
+		type: "ataque",
+	},
 	{
 		titulo: "Disparo",
 		descr: "Disparo al arco",
@@ -111,7 +111,7 @@ function App() {
 
 	// Sistema de turnos
 	const [turnoJugador1, setTurnoJugador1] = useState(true);
-	const [turnosRestantes, setTurnosRestantes] = useState(2);
+	const [turnosRestantes, setTurnosRestantes] = useState(5);
 
 	//Sistema cartas
 	const [cartasJugador1, setcartasJugador1] = useState([]);
@@ -129,6 +129,9 @@ function App() {
 	//Cartas atajar activar
 	const [atajarActivaJugador1, setAtajarActivaJugador1] = useState(false);
 	const [atajarActivaJugador2, setAtajarActivaJugador2] = useState(false);
+
+	const [centroActivaJugador1,setCentroActivaJugador1] = useState(false);
+	const [centroActivaJugador2,setCentroActivaJugador2] = useState(false);
 
 	// Puntajes
 	const [puntajeJugador1, setPuntajeJugador1] = useState(0);
@@ -307,6 +310,65 @@ function App() {
 			if (atajarActivaJugador2) {
 				// Chances divididas entre 2
 				chances /= 2;
+			}
+			// Divido todo por 2 para que no haya tantos goles
+			chances /= 2;
+
+			if (coinFlip(chances)) {
+				showDialog(
+					`Gol! con ${porcentual(chances)} chances`,
+					"success"
+				);
+				setPosicionPelota(2);
+				setPuntajeJugador1(puntajeJugador1 + 1);
+			} else {
+				showDialog(
+					`Gol errado con ${porcentual(
+						chances
+					)} chances, turno jugador 2`,
+					"error"
+				);
+				// Arranca el turno del jugador 2
+				setTurnoJugador1(false);
+				clickBoton();
+				return;
+			}
+		}
+
+		if(carta.titulo == "Centro"){
+			if(posicionPelota == 3){
+				setCentroActivaJugador1(true);
+			}
+			return;
+		}
+
+		if (carta.titulo == "Cabeza") {
+			//A mayor distancia, menos probabilidad de gol
+			let sumaJugadoresPropios = 0;
+			let sumaJugadoresRivales = 0;
+			let chances = 1;
+			if (posicionPelota == 3) {
+				sumaJugadoresPropios = formacion1.del;
+				sumaJugadoresRivales = formacion2.def;
+			}
+			else{
+				return;
+			}
+
+			chances =
+				0.5 * ((1 / 3) * posicionPelota) +
+				0.5 *
+					((3 * sumaJugadoresPropios) /
+						(3 * sumaJugadoresPropios + sumaJugadoresRivales));
+
+			if (atajarActivaJugador2) {
+				// Chances divididas entre 2
+				chances /= 2;
+			}
+
+			if (centroActivaJugador1) {
+				chances*=2;
+				setCentroActivaJugador1(false);
 			}
 			// Divido todo por 2 para que no haya tantos goles
 			chances /= 2;
