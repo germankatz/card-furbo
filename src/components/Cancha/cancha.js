@@ -20,6 +20,12 @@ export default function Cancha({
 	puntajeJugador1,
 	puntajeJugador2,
 	turnosRestantes,
+	atajarActivaJugador1,
+	atajarActivaJugador2,
+	centroActivaJugador1,
+	centroActivaJugador2,
+	defensaActivaJugador1,
+	defensaActivaJugador2,
 }) {
 	// Etapa: Jugar
 	// Etapa 3: Elegir carta jugador 1
@@ -196,6 +202,8 @@ export default function Cancha({
 						<div className="ml-4">
 							<div>Jugador 1</div>
 							<div className="text-left">{formacion1.name} </div>
+							{atajarActivaJugador1 ? (<div className="mt-2 -ml-2 text-sm rounded-full bg-blue-900 text-white px-3 py-1">Atajar activo</div>) : null}
+							{defensaActivaJugador1 ? (<div className="mt-2 -ml-2 text-sm rounded-full bg-blue-900 text-white px-3 py-1">Defender activo</div>) : null}
 						</div>
 					</div>
 					<div className="text-white text-5xl grid justify-items-center">
@@ -222,6 +230,8 @@ export default function Cancha({
 						<div>
 							<div>Jugador 2</div>
 							<div className="text-right">{formacion2.name} </div>
+							{atajarActivaJugador2 ? (<div className="mt-2 -mr-2 text-sm rounded-full bg-red-900 text-white px-3 py-1">Atajar activo</div>) : null}
+							{defensaActivaJugador2 ? (<div className="mt-2 -mr-2 text-sm rounded-full bg-red-900 text-white px-3 py-1">Defender activo</div>) : null}
 						</div>
 						<div>
 							<div className={"rounded-full w-5 h-5 bg-red-500 mt-2 absolute" }></div>
@@ -237,7 +247,7 @@ export default function Cancha({
 							<div className="w-8 h-8 rounded-full bg-gray-800 place-self-center"></div>
 						</div>
 					</div>
-					<div className="grid grid-cols-1 content-center h-full gap-24">
+					<div className="grid grid-cols-1 content-around">
 						{[...Array(formacion1.def)].map((e, i) => (
 							<div key={i}>
 								<div className="w-8 h-8 rounded-full bg-blue-500"></div>
@@ -245,7 +255,7 @@ export default function Cancha({
 						))}
 					</div>
 					{graficarPelota(1)}
-					<div className="grid grid-cols-1 content-center h-full gap-24">
+					<div className="grid grid-cols-1 content-around">
 						{[...Array(formacion2.del)].map((e, i) => (
 							<div key={i}>
 								<div className="w-8 h-8 rounded-full bg-red-500"></div>
@@ -253,7 +263,7 @@ export default function Cancha({
 						))}
 					</div>
 					<div className="h-full bg-green-300 w-3 "></div>
-					<div className="grid grid-cols-1 content-center h-full gap-24">
+					<div className="grid grid-cols-1 content-around">
 						{[...Array(formacion1.med)].map((e, i) => (
 							<div key={i}>
 								<div className="w-8 h-8 rounded-full bg-blue-500"></div>
@@ -261,7 +271,7 @@ export default function Cancha({
 						))}
 					</div>
 					{graficarPelota(2)}
-					<div className="grid grid-cols-1 content-center h-full gap-24">
+					<div className="grid grid-cols-1 content-around">
 						{[...Array(formacion2.med)].map((e, i) => (
 							<div key={i}>
 								<div className="w-8 h-8 rounded-full bg-red-500"></div>
@@ -270,7 +280,7 @@ export default function Cancha({
 					</div>
 
 					<div className="h-full bg-green-300 w-3 "></div>
-					<div className="grid grid-cols-1 content-center h-full gap-24">
+					<div className="grid grid-cols-1 content-around">
 						{[...Array(formacion1.del)].map((e, i) => (
 							<div key={i}>
 								<div className="w-8 h-8 rounded-full bg-blue-500"></div>
@@ -278,7 +288,7 @@ export default function Cancha({
 						))}
 					</div>
 					{graficarPelota(3)}
-					<div className="grid grid-cols-1 content-center h-full gap-24">
+					<div className="grid grid-cols-1 content-around">
 						{[...Array(formacion2.def)].map((e, i) => (
 							<div key={i}>
 								<div className="w-8 h-8 rounded-full bg-red-500"></div>

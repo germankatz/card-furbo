@@ -2,13 +2,13 @@ export default function Carta({ carta, clickCarta, id }) {
 	const chooseBackground = (carta) => {
 		switch (carta.type) {
 			case "ataque":
-				return "bg-red-200";
+				return "bg-red-300";
 			case "neutra":
-				return "bg-yellow-200";
+				return "bg-yellow-300";
 			case "defensa":
-				return "bg-blue-200";
+				return "bg-blue-300";
 			default:
-				return "bg-gray-200";
+				return "bg-gray-300";
 		}
 	};
 

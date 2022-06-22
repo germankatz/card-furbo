@@ -59,20 +59,25 @@ const cartas = [
 		type: "defensa",
 	},
 	{
-		titulo: "Atajar",
-		descr: "Ataje seguro",
-		type: "defensa",
+		titulo: "Adelantar defensa",
+		descr: "Adelantar jugador una posicion",
+		type: "nuetra",
 	},
 	{
-		titulo: "Atajar",
-		descr: "Ataje seguro",
-		type: "defensa",
+		titulo: "Adelantar mediocampo",
+		descr: "Adelantar jugador una posicion",
+		type: "nuetra",
 	},
-	// {
-	// 	titulo: "Adelantar",
-	// 	descr: "Adelantar jugador una posicion",
-	// 	type: "movimiento",
-	// },
+	{
+		titulo: "Retrasar delantero",
+		descr: "Retrasar jugador una posicion",
+		type: "nuetra",
+	},
+	{
+		titulo: "Retrasar mediocampo",
+		descr: "Retrasar jugador una posicion",
+		type: "nuetra",
+	},
 	// {
 	// 	titulo: "Atrasar",
 	// 	descr: "Retrasar jugador una posicion",
@@ -205,8 +210,13 @@ function App() {
 				setcartasJugador1([...cartasJugador1, carta]); // Agregar carta a cartasJugador1
 				setCartasAleatorias([...elegirNCartas(5)]); // Actualizar cartasAleatorias
 				setSeleccionadasJugador1(seleccionadasJugador1 + 1); // Sumo una elegida de carta mas de las 3 que puede usar
+				showDialog(`${(2 - seleccionadasJugador1)} cartas restantes`);
+				if((2 - seleccionadasJugador1) == 0){
+					showDialog("Proceda a jugar");
+					setEtapa(4);
+				}
 			} else {
-				console.log("No puede seleccionar carta  jugador 1");
+				showDialog("No puedes seleccionar mas cartas", "error");
 			}
 		}
 		if (!turnoJugador1) {
@@ -219,8 +229,13 @@ function App() {
 				setcartasJugador2([...cartasJugador2, carta]); // Agregar carta a cartasJugador1
 				setCartasAleatorias([...elegirNCartas(5)]); // Actualizar cartasAleatorias
 				setSeleccionadasJugador2(seleccionadasJugador2 + 1); // Sumo una elegida de carta mas de las 3 que puede usar
+				showDialog(`${(2 - seleccionadasJugador2)} cartas restantes`);
+				if((2 - seleccionadasJugador2) == 0){
+					showDialog("Proceda a jugar");
+					setEtapa(6);
+				}
 			} else {
-				console.log("No puede seleccionar carta jugador 2");
+				showDialog("No puedes seleccionar mas cartas", "error");
 			}
 		}
 	};
@@ -394,6 +409,62 @@ function App() {
 				return;
 			}
 		}
+		if (carta.titulo == "Atajar") {
+			setAtajarActivaJugador1(true);
+			return;
+		}
+		if (carta.titulo == "Defender") {
+			setDefensaActivaJugador1(true);
+			return;
+		}
+		if (carta.titulo == "Adelantar defensa") {
+			if (formacion1.def == 1){
+				showDialog("No puedes quedarte sin defensa");
+				return;
+			} 
+			setFormacion1({
+				def: formacion1.def -1 ,
+				med: formacion1.med + 1,
+				del: formacion1.del,
+				name: (formacion1.def -1) + "-" +(formacion1.med + 1 )+ "-" + formacion1.del,
+			})
+		}
+		if (carta.titulo == "Adelantar mediocampo") {
+			if (formacion1.med == 1){
+				showDialog("No puedes quedarte sin mediocampo");
+				return;
+			}
+			setFormacion1({
+				def: formacion1.def,
+				med: formacion1.med - 1,
+				del: formacion1.del + 1,
+				name: formacion1.def + "-" + (formacion1.med - 1) + "-" + (formacion1.del + 1),
+			})
+		}
+		if (carta.titulo == "Retrasar delantero"){
+			if (formacion1.del == 1){
+				showDialog("No puedes quedarte sin delantero");
+				return;
+			}
+			setFormacion1({
+				def: formacion1.def ,
+				med: formacion1.med + 1,
+				del: formacion1.del - 1,
+				name: formacion1.def+ "-" + (formacion1.med + 1) + "-" + (formacion1.del - 1),
+			})
+		}
+		if (carta.titulo == "Retrasar mediocampo"){
+			if (formacion1.med == 1){
+				showDialog("No puedes quedarte sin mediocampo");
+				return;
+			}
+			setFormacion1({
+				def: formacion1.def + 1,
+				med: formacion1.med - 1,
+				del: formacion1.del,
+				name: (formacion1.def + 1) + "-" + (formacion1.med - 1) + "-" + formacion1.del,
+			})
+		}
 	};
 
 	const jugarCarta2 = (carta) => {
@@ -550,6 +621,62 @@ function App() {
 				return;
 			}
 		}
+		if (carta.titulo == "Atajar") {
+			setAtajarActivaJugador2(true);
+			return;
+		}
+		if (carta.titulo == "Defender") {
+			setDefensaActivaJugador2(true);
+			return;
+		}
+		if (carta.titulo == "Adelantar defensa") {
+			if (formacion2.def == 1){
+				showDialog("No puedes quedarte sin defensa");
+				return;
+			} 
+			setFormacion2({
+				def: formacion2.def -1 ,
+				med: formacion2.med + 1,
+				del: formacion2.del,
+				name: (formacion2.def -1) + "-" + (formacion2.med + 1) + "-" + formacion2.del,
+			})
+		}
+		if (carta.titulo == "Adelantar mediocampo") {
+			if (formacion2.med == 1){
+				showDialog("No puedes quedarte sin mediocampo");
+				return;
+			}
+			setFormacion2({
+				def: formacion2.def,
+				med: formacion2.med - 1,
+				del: formacion2.del + 1,
+				name: formacion2.def + "-" + (formacion2.med - 1) + "-" + (formacion2.del + 1),
+			})
+		}
+		if (carta.titulo == "Retrasar delantero"){
+			if (formacion2.del == 1){
+				showDialog("No puedes quedarte sin delantero");
+				return;
+			}
+			setFormacion2({
+				def: formacion2.def ,
+				med: formacion2.med + 1,
+				del: formacion2.del - 1,
+				name: formacion2.def+ "-" + (formacion2.med + 1) + "-" + (formacion2.del - 1),
+			})
+		}
+		if (carta.titulo == "Retrasar mediocampo"){
+			if (formacion2.med == 1){
+				showDialog("No puedes quedarte sin mediocampo");
+				return;
+			}
+			setFormacion2({
+				def: formacion2.def + 1,
+				med: formacion2.med - 1,
+				del: formacion2.del,
+				name: (formacion2.def + 1) + "-" + (formacion2.med - 1) + "-" + formacion2.del,
+			})
+		}
 	};
 
 	const clickCartaJugador1 = (carta, key) => {
@@ -594,10 +721,22 @@ function App() {
 
 		// Actualizar turno
 		if (etapa == 4) {
+			// Seteo en falso todas las cartas que duran un turno
+			setAtajarActivaJugador2(false);
+			setCentroActivaJugador2(false);
+			setDefensaActivaJugador2(false);
+
 			setTurnoJugador1(!turnoJugador1); // Cambiamos
 		}
 
 		if (etapa === 6) {
+			// Arranca el turno del jugador 1
+			
+			// Seteo en falso todas las cartas que duran un turno
+			setAtajarActivaJugador1(false);
+			setCentroActivaJugador1(false);
+			setDefensaActivaJugador1(false);
+
 			setTurnoJugador1(true);
 			setTurnosRestantes(turnosRestantes - 1); // Turnos de toda la partida
 			setEtapa(3);
@@ -655,6 +794,13 @@ function App() {
 							puntajeJugador1={puntajeJugador1}
 							puntajeJugador2={puntajeJugador2}
 							turnosRestantes={turnosRestantes}
+							atajarActivaJugador1={atajarActivaJugador1}
+							atajarActivaJugador2={atajarActivaJugador2}
+							centroActivaJugador1={centroActivaJugador1}
+							centroActivaJugador2={centroActivaJugador2}
+							defensaActivaJugador1={defensaActivaJugador1}
+							defensaActivaJugador2={defensaActivaJugador2}
+							
 						/>
 						{dialog.show && (
 							<div className="absolute top-0 left-0 right-0 mt-4 grid justify-items-center">
