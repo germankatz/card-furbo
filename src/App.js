@@ -1,9 +1,15 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Carta from "./components/Carta/carta";
 
 import Cancha from "./components/Cancha/cancha";
 import ElegirFormacion from "./components/ElegirFormacion/elegirFormacion";
+import sonidoOpening from '../src/audios/opening.mp3';
+import sonidoLoop from '../src/audios/ambiente1.mp3';
+import sonidoPitido from '../src/audios/pitido.mp3'
+import sonidoGol from '../src/audios/gol.mp3'
+import PartidoTerminado from "./components/PartidoTerminado/PartidoTerminado";
+
 
 const formaciones = [
 	{ def: 4, med: 2, del: 1, name: "4-2-1" },
@@ -61,22 +67,22 @@ const cartas = [
 	{
 		titulo: "Adelantar defensa",
 		descr: "Adelantar jugador una posicion",
-		type: "nuetra",
+		type: "neutra",
 	},
 	{
 		titulo: "Adelantar mediocampo",
 		descr: "Adelantar jugador una posicion",
-		type: "nuetra",
+		type: "neutra",
 	},
 	{
 		titulo: "Retrasar delantero",
 		descr: "Retrasar jugador una posicion",
-		type: "nuetra",
+		type: "neutra",
 	},
 	{
 		titulo: "Retrasar mediocampo",
 		descr: "Retrasar jugador una posicion",
-		type: "nuetra",
+		type: "neutra",
 	},
 	// {
 	// 	titulo: "Atrasar",
@@ -86,6 +92,8 @@ const cartas = [
 ];
 
 function App() {
+
+
 	const [dialog, setDialog] = useState({
 		show: false,
 		text: "",
@@ -94,6 +102,7 @@ function App() {
 
 	const [formacion1, setFormacion1] = useState([]);
 	const [formacion2, setFormacion2] = useState([]);
+
 
 	// Etapa 1: Elegir formacion jugador 1
 	// Etapa 2: Elegir formacion jugador 2
@@ -170,6 +179,17 @@ function App() {
 		}
 	};
 
+	const gol = () => {
+		let audio = new Audio(sonidoGol);
+		audio.play();
+		audio.onended=function()
+		{
+			let audio2 = new Audio(sonidoPitido);
+			audio2.play();
+		}
+		
+	}
+
 	const elegirFormacion = (formacion) => {
 		if (etapa === 1) {
 			setcartasJugador1([]);
@@ -179,6 +199,18 @@ function App() {
 			setcartasJugador2([]);
 			setFormacion2(formacion);
 			setCartasAleatorias([...elegirNCartas(5)]);
+
+			// Play sound loop 
+			let audio = new Audio(sonidoLoop);
+			audio.volume = 0.3;
+			audio.loop = true;
+			audio.play();
+
+			// Play sonido pitido
+			let audio2 = new Audio(sonidoPitido);
+			audio2.play();
+
+
 			setEtapa(3);
 		}
 	};
@@ -246,7 +278,8 @@ function App() {
 
 	const porcentual = (prob) => {
 		// eliminar decimales
-		return Math.floor(prob * 100) + "%";
+		// Truncar sin decimales
+		return Math.trunc(prob * 100) + "%";
 	};
 
 	const jugarCarta1 = (carta) => {
@@ -330,6 +363,7 @@ function App() {
 			chances /= 2;
 
 			if (coinFlip(chances)) {
+				gol();
 				showDialog(
 					`Gol! con ${porcentual(chances)} chances`,
 					"success"
@@ -393,6 +427,7 @@ function App() {
 			chances /= 2;
 
 			if (coinFlip(chances)) {
+				gol();
 				showDialog(
 					`Gol! con ${porcentual(chances)} chances`,
 					"success"
@@ -554,7 +589,8 @@ function App() {
 			chances /= 2;
 
 			if (coinFlip(chances)) {
-				showDialog(`Gol! con ${chances * 100} chances`, "success");
+				gol();
+				showDialog(`Gol! con ${porcentual(chances)} chances`, "success");
 				setPosicionPelota(2);
 				setPuntajeJugador2(puntajeJugador2 + 1);
 				// Arranca el turno del jugador 1
@@ -563,7 +599,7 @@ function App() {
 				return;
 			} else {
 				showDialog(
-					`Gol errado con ${chances * 100} chances, turno jugador 2`,
+					`Gol errado con ${porcentual(chances)} chances, turno jugador 2`,
 					"error"
 				);
 				// Arranca el turno del jugador 1
@@ -613,6 +649,7 @@ function App() {
 			chances /= 2;
 
 			if (coinFlip(chances)) {
+				gol();
 				showDialog(
 					`Gol! con ${porcentual(chances)} chances`,
 					"success"
@@ -699,7 +736,10 @@ function App() {
 		// Ver que etapa está
 		if (etapa === 3) {
 			// Elimino la carta del array de cartasJugador1 en la key
-			setcartasJugador1(cartasJugador1.filter((c, i) => i !== key));
+			// Preguntar si quiere borrarla
+			if (window.confirm("¿Quieres borrar la carta " + carta.titulo + "?")) {
+				setcartasJugador1(cartasJugador1.filter((c, i) => i !== key));
+			};
 		}
 		if (etapa === 4) {
 			//Juega la carta y la elimino del array de cartasJugador1 en la key
@@ -714,7 +754,9 @@ function App() {
 		// Elimino la carta del array de cartasJugador2 en la key
 		if (etapa === 5) {
 			// Elimino la carta del array de cartasJugador1 en la key
-			setcartasJugador2(cartasJugador2.filter((c, i) => i !== key));
+			if (window.confirm("¿Quieres borrar la carta " + carta.titulo + "?")) {
+				setcartasJugador2(cartasJugador2.filter((c, i) => i !== key));
+			};
 		}
 		if (etapa === 6) {
 			//Juega la carta y la elimino del array de cartasJugador2 en la key
@@ -724,7 +766,6 @@ function App() {
 	};
 
 	const clickBoton = () => {
-		console.log("Finalizar turno");
 
 		// Seteo todos los centros en false
 		setCentroActivaJugador1(false);
@@ -754,6 +795,9 @@ function App() {
 
 			setTurnoJugador1(true);
 			setTurnosRestantes(turnosRestantes - 1); // Turnos de toda la partida
+			if (turnosRestantes < 1 ){
+				setEtapa(7);
+			}
 			setEtapa(3);
 		} else {
 			// Actualizar etapa
@@ -761,9 +805,10 @@ function App() {
 		}
 
 		if (turnosRestantes === 0) {
-			alert("El juego ha terminado");
+			setEtapa(7);
 			return;
 		}
+
 	};
 
 	const renderizadoEtapa = () => {
@@ -821,7 +866,7 @@ function App() {
 							<div className="absolute top-0 left-0 right-0 mt-4 grid justify-items-center">
 								<div
 									className={
-										"py-4 px-6 w-min border rounded shadow-md " +
+										"py-4 px-6 w-min border rounded shadow-md text-3xl " +
 										typeDialog(dialog.type)
 									}
 								>
@@ -831,6 +876,13 @@ function App() {
 						)}
 					</>
 				);
+			case 7:
+				return (
+					<PartidoTerminado
+						puntajeJugador1={puntajeJugador1}
+						puntajeJugador2={puntajeJugador2}
+						/>
+				)
 			default:
 				return "";
 		}

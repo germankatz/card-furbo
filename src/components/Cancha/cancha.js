@@ -38,6 +38,7 @@ export default function Cancha({
 
 	// Etapa 9: Restar turno restante y volver etapa 3 While turnosRestantes != 0
 
+
 	const descrBoton = () => {
 		switch (etapa) {
 			case 1:
@@ -220,7 +221,7 @@ export default function Cancha({
 							onClick={terminarTurno}
 							className="px-4 py-3 flex bg-green-800 text-sm rounded-full w-min shadow-sm cursor-pointer hover:bg-green-900"
 						>
-							NEXT 
+							Siguiente 
 							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
 							</svg>
